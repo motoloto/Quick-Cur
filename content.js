@@ -4,12 +4,12 @@ function removeElement(elementId){
 }
 
 const elementId = "quick_cur";
+const NumberFormat = new Intl.NumberFormat('en-US');
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   removeElement(elementId);
   console.log(request.amount);
-  const popText = `${request.targetCcy} $:  ${request.amount}`;
-  // alert("金額為" + request.amount);
+  const popText = `${request.targetCcy} $ ${NumberFormat.format(request.amount.toFixed(2))}`;
   // Callback for that request
   // markSelection();
   (function (popText) {
@@ -50,7 +50,10 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         selectionEl = doc.createElement("div");
         selectionEl.id = elementId;
         selectionEl.style.border = "solid darkblue 1px";
-        selectionEl.style.backgroundColor = "lightgoldenrodyellow";
+        selectionEl.style.borderRadius= "5px";
+        selectionEl.style.backgroundColor = "GhostWhite";
+        selectionEl.style.padding="2px 4px 2px 4px";
+        selectionEl.style.boxShadow=" rgba(0, 0, 0, 0.2) 0px 1px 3px";
         selectionEl.innerHTML = `${popText}`;
         selectionEl.style.position = "absolute";
 
@@ -59,7 +62,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
       // Find markerEl position http://www.quirksmode.org/js/findpos.html
       var obj = markerEl;
-      var left = 0, top = 0;
+      var left = 0, top = 20;
       do {
         left += obj.offsetLeft;
         top += obj.offsetTop;

@@ -8,7 +8,6 @@ const NumberFormat = new Intl.NumberFormat('en-US');
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   removeElement(elementId);
-  console.log(request.amount);
   const popText = `${request.targetCcy} $ ${NumberFormat.format(request.amount.toFixed(2))}`;
   // Callback for that request
   // markSelection();

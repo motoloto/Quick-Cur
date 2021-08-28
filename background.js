@@ -21,7 +21,6 @@ function getExchangeRateFromStore(currencyMap) {
 
 function makeExchange(rateKey,info) {
   Promise.all([getExchangeRateFromStore(`USD${rateKey[0]}`), getExchangeRateFromStore(`USD${rateKey[1]}`)]).then(values => {
-    console.log(values[0] ,"+",values[1]);
     const rateToUSD = values[0].Exrate;
     const rateToTarget = values[1].Exrate;
     const amount = Number(info.selectionText) / rateToUSD * rateToTarget;
@@ -51,21 +50,13 @@ chrome.contextMenus.create(
 chrome.contextMenus.create(
   { id: "TWDtoUSD", title: "台幣轉美金", type: "normal", parentId: "rootMenu", contexts: ["selection"] });
 
-
-chrome.contextMenus.create(
-  { id: "test", title: `${new Date()}`, type: "normal", parentId: "rootMenu", contexts: ["selection"] });
+  chrome.contextMenus.create(
+    { id: "JPYtoTWD", title: "日圓轉台幣", type: "normal", parentId: "rootMenu", contexts: ["selection"] });
 
 chrome.contextMenus.onClicked.addListener(
   (info, tab) => {
     let rate = null;
-    console.log("info",info);
-    console.log("tab",tab);
-    if (info.menuItemId == 'USDtoTWD') {
-      rateKey = ["USD","TWD"];
-    } else if (info.menuItemId == 'TWDtoUSD') {
-      rateKey = ["TWD","USD"];
-
-    }
+    rateKey= info.menuItemId.split("to");
     makeExchange(rateKey, info)
   }
 
@@ -93,12 +84,5 @@ fetch('https://tw.rter.info/capi.php', {
           console.log("Got expected error: " + chrome.extension.lastError.message);
         }
       });
-    // console.log('rate is ready:', text)
-    // chrome.storage.local.get("exchangeRates", function (result) {
-    //   console.log('Value set is ' + JSON.stringify(result));
-    // });
-    // chrome.storage.local.get("dataUpdateTime", function (result) {
-    //   console.log('Value set is ' + JSON.stringify(result));
-    // });
   });
 }

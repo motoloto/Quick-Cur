@@ -13,8 +13,7 @@
         "activeTab",
         "scripting",
         "contextMenus",
-        "webRequest",
-        "alarms"
+        "webRequest"
         
     ],
     "externally_connectable": {

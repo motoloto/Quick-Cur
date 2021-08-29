@@ -1,48 +1,50 @@
-//TODO change this to support adding exchange option to store
+//TODO add remove currency map function
 
-// let page = document.getElementById("buttonDiv");
-// let selectedClassName = "current";
-// const presetButtonColors = ["#3aa757", "#e8453c", "#f9bb2d", "#4688f1"];
+function displayCurrentMappingList() {
+    chrome.storage.local.get("currencyMappings", function (result) {
+        console.log('Value set is ' + JSON.stringify(result));
 
-// // Reacts to a button click by marking the selected button and saving
-// // the selection
-// function handleButtonClick(event) {
-//   // Remove styling from the previously selected color
-//   let current = event.target.parentElement.querySelector(
-//     `.${selectedClassName}`
-//   );
-//   if (current && current !== event.target) {
-//     current.classList.remove(selectedClassName);
-//   }
+        result.currencyMappings.forEach(element => {
 
-//   // Mark the button as selected
-//   let color = event.target.dataset.color;
-//   event.target.classList.add(selectedClassName);
-//   chrome.storage.sync.set({ color });
-// }
+            var node = document.createElement("LI");
+            var textNode = document.createTextNode(`${element[0]} -> ${element[1]}`);
+            node.appendChild(textNode);
+            document.getElementById("mappingList").appendChild(node);
+        });
+    });
+}
 
-// // Add a button to the page for each supplied color
-// function constructOptions(buttonColors) {
-//   chrome.storage.sync.get("color", (data) => {
-//     let currentColor = data.color;
-//     // For each color we were provided…
-//     for (let buttonColor of buttonColors) {
-//       // …create a button with that color…
-//       let button = document.createElement("button");
-//       button.dataset.color = buttonColor;
-//       button.style.backgroundColor = buttonColor;
+function addCurrencyMapping(newCcyMap) {
+    if(newCcyMap && newCcyMap[0] && newCcyMap[1]){
+        chrome.storage.local.get("currencyMappings", function (result) {
+            let mappingSet = new Set(result.currencyMappings);
+            mappingSet.add(newCcyMap);
+            chrome.storage.local.set({ "currencyMappings": [...mappingSet]},
+                function () {
+                    refresh();
+                    if (chrome.extension.lastError) {
+                        console.log("Got expected error: " + chrome.extension.lastError.message);
+                    }
+                    chrome.runtime.sendMessage({ event: "updateMenu" }, function(response) {  
+                        console.log(response);  
+                    });  
+                });
+        });
+    }
+    
+}
 
-//       // …mark the currently selected color…
-//       if (buttonColor === currentColor) {
-//         button.classList.add(selectedClassName);
-//       }
+function handleButtonClick(event) {
+      const sourceCcy = document.getElementById("sourceCcy").value;
+      const targetCcy = document.getElementById("targetCcy").value;
+      addCurrencyMapping([sourceCcy, targetCcy]);
+    }
 
-//       // …and register a listener for when that button is clicked
-//       button.addEventListener("click", handleButtonClick);
-//       page.appendChild(button);
-//     }
-//   });
-// }
+function refresh(){
+    let mappingList =document.getElementById("mappingList");
+    mappingList.innerHTML='';
+    displayCurrentMappingList();
+}    
 
-// // Initialize the page by constructing the color options
-// constructOptions(presetButtonColors);
+document.getElementById("addCcyMapping").addEventListener("click",handleButtonClick);
+refresh();

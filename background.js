@@ -7,6 +7,7 @@ chrome.runtime.onStartup.addListener(() => {
 });
 chrome.runtime.onInstalled.addListener(() => {
   retrieveExchangeRate();
+  setDefaultCcyMapping();
 });
 
 
@@ -86,3 +87,43 @@ fetch('https://tw.rter.info/capi.php', {
       });
   });
 }
+const defaultCcyMapping = [
+  ["TWD","USD"],
+  ["USD","TWD"],
+  ["JPY","TWD"]
+];
+function setDefaultCcyMapping(){
+  chrome.storage.local.set({ "currencyMappings": defaultCcyMapping},
+      function () {
+        if (chrome.extension.lastError) {
+          console.log("Got expected error: " + chrome.extension.lastError.message);
+        }
+      });
+}
+
+function prepareContextMenuBySetting(mappings){
+  chrome.contextMenus.removeAll();
+  chrome.contextMenus.create(
+    { id: "rootMenu", title: "將所選金額： %s", contexts: ["selection"] },
+    function () {
+      if (chrome.extension.lastError) {
+        console.log("Got expected error: " + chrome.extension.lastError.message);
+      }
+    });
+  mappings.forEach(map => {
+    chrome.contextMenus.create(
+      { id: `${map[0]}to${map[1]}`, title: `${map[0]} => ${map[1]}`, type: "normal", parentId: "rootMenu", contexts: ["selection"] });
+  })
+
+}
+
+chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {  
+  console.log(message);
+
+  if(message.event === "updateMenu"){
+    chrome.storage.local.get("currencyMappings", function (result) {
+      prepareContextMenuBySetting(result.currencyMappings);
+    });
+  }
+  sendResponse({result: "success"});  
+});

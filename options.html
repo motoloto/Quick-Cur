@@ -1,21 +1,70 @@
 <!-- TODO change this to support adding exchange option to store -->
 <!DOCTYPE html>
+<meta charset="utf-8">
 <html>
-  <head>
-    <link rel="stylesheet" href="button.css">
-  </head>
-  <body>
-    <!-- <div id="buttonDiv">
+
+<head>
+  <link rel="stylesheet" href="button.css">
+</head>
+
+<body>
+  <!-- <div id="buttonDiv">
     </div> -->
-    <!-- <script src="options.js"></script> -->
+  <section>
     <div>
-      <b>Quick Cur options</b>
+      <h1>Quick Cur options</h1>
       <p>The quick way to exchange your selection</p>
+      <h3>How To Use</h3>
       <ol>
         <li>Select the number text on page</li>
         <li>Right Click on it</li>
         <li>Choose the exchange action you want to make</li>
       </ol>
     </div>
-  </body>
+  </section>
+  <section></section>
+  <section>
+    <div>
+      <h1>QuickCur 即時金額換匯幫手</h1>
+      <p>將網頁上所選取的金額即時換匯成你要的幣別，簡單選取按右鍵便可顯示你要的金額．</p>
+      <h3>使用方法</h3>
+      <ol>
+        <li>將網頁上的數字匡起來</li>
+        <li>在反白部分按右鍵</li>
+        <li>選擇想要轉換的幣別</li>
+        <li>轉換厚的金額會顯示在畫面上</li>
+      </ol>
+    </div>
+  </section>
+
+  <section>
+  <h3><b>新增轉換幣別．Add exchange mapping </b></h3>
+  <label for="sourceCcy">選擇來源幣別．Choose source currency</label>
+
+  <select name="sourceCcy" id="sourceCcy">
+    <option value="TWD">TWD</option>
+    <option value="USD">USD</option>
+    <option value="JPY">JPY</option>
+    <option value="CNY">CNY</option>
+  </select>
+  <br/>
+  <label for="targetCcy">選擇目標幣別．Choose target currency</label>
+  <select name="targetCcy" id="targetCcy">
+    <option value="TWD">TWD</option>
+    <option value="USD">USD</option>
+    <option value="JPY">JPY</option>
+    <option value="CNY">CNY</option>
+  </select>
+  <br/>
+  <button type="button" id="addCcyMapping"  >Add</button>
+  </section>
+  <section>
+    <h3>目前的匯率轉換</h3>
+    <ol id="mappingList">
+    </ol>
+  </section>
+</body>
+<script src="options.js"></script>
+
+
 </html>

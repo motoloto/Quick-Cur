@@ -7,6 +7,7 @@ const elementId = "quick_cur";
 const NumberFormat = new Intl.NumberFormat('en-US');
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+  
   removeElement(elementId);
   const popText = `${request.targetCcy} $ ${NumberFormat.format(request.amount.toFixed(2))}`;
   // Callback for that request

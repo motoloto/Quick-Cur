@@ -20,14 +20,14 @@ function getExchangeRateFromStore(currencyMap) {
   })
 }
 
-function makeExchange(rateKey,info) {
+function makeExchange(rateKey, info) {
   Promise.all([getExchangeRateFromStore(`USD${rateKey[0]}`), getExchangeRateFromStore(`USD${rateKey[1]}`)]).then(values => {
     const rateToUSD = values[0].Exrate;
     const rateToTarget = values[1].Exrate;
     const amount = Number(info.selectionText) / rateToUSD * rateToTarget;
     if (!isNaN(amount)) {
       chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-        chrome.tabs.sendMessage(tabs[0].id, { "amount": amount, "targetCcy":rateKey[1] }, function (response) {
+        chrome.tabs.sendMessage(tabs[0].id, { "amount": amount, "targetCcy": rateKey[1] }, function (response) {
           console.log(response);
         });
       });
@@ -36,72 +36,48 @@ function makeExchange(rateKey,info) {
 }
 
 
-// right-click menu
-chrome.contextMenus.create(
-  { id: "rootMenu", title: "將所選金額： %s", contexts: ["selection"] },
-  function () {
-    if (chrome.extension.lastError) {
-      console.log("Got expected error: " + chrome.extension.lastError.message);
-    }
-  });
-chrome.contextMenus.create(
-  { id: "USDtoTWD", title: "美金轉台幣", type: "normal", parentId: "rootMenu", contexts: ["selection"] });
 
 
-chrome.contextMenus.create(
-  { id: "TWDtoUSD", title: "台幣轉美金", type: "normal", parentId: "rootMenu", contexts: ["selection"] });
-
-  chrome.contextMenus.create(
-    { id: "JPYtoTWD", title: "日圓轉台幣", type: "normal", parentId: "rootMenu", contexts: ["selection"] });
-
-chrome.contextMenus.onClicked.addListener(
-  (info, tab) => {
-    let rate = null;
-    rateKey= info.menuItemId.split("to");
-    makeExchange(rateKey, info)
-  }
-
-);
-
-
-function retrieveExchangeRate(){
-fetch('https://tw.rter.info/capi.php', {
-  method: 'GET', // *GET, POST, PUT, DELETE, etc.
-  headers: {
-    'Content-Type': 'application/json',
-    'Accept': 'application/json'
-  },
-  credentials: 'same-origin',
-  redirect: 'follow', // manual, *follow, error
-  referrer: 'no-referrer', // *client, no-referrer
-}).catch(error => console.error('Error:', error))
-  .then(response => response.json())
-  .then(text => {
-    // console.log("exchangeRates", text);
-    const currentTime = new Date();
-    chrome.storage.local.set({ "exchangeRates": text, "dataUpdateTime": `${currentTime}` },
-      function () {
-        if (chrome.extension.lastError) {
-          console.log("Got expected error: " + chrome.extension.lastError.message);
-        }
-      });
-  });
+function retrieveExchangeRate() {
+  fetch('https://tw.rter.info/capi.php', {
+    method: 'GET', // *GET, POST, PUT, DELETE, etc.
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    },
+    credentials: 'same-origin',
+    redirect: 'follow', // manual, *follow, error
+    referrer: 'no-referrer', // *client, no-referrer
+  }).catch(error => console.error('Error:', error))
+    .then(response => response.json())
+    .then(text => {
+      // console.log("exchangeRates", text);
+      const currentTime = new Date();
+      chrome.storage.local.set({ "exchangeRates": text, "dataUpdateTime": `${currentTime}` },
+        function () {
+          if (chrome.extension.lastError) {
+            console.log("Got expected error: " + chrome.extension.lastError.message);
+          }
+        });
+    });
 }
 const defaultCcyMapping = [
-  ["TWD","USD"],
-  ["USD","TWD"],
-  ["JPY","TWD"]
+  "TWD|USD",
+  "USD|TWD",
+  "JPY|TWD"
 ];
-function setDefaultCcyMapping(){
-  chrome.storage.local.set({ "currencyMappings": defaultCcyMapping},
-      function () {
-        if (chrome.extension.lastError) {
-          console.log("Got expected error: " + chrome.extension.lastError.message);
-        }
-      });
+function setDefaultCcyMapping() {
+  chrome.storage.local.set({ "currencyMappings": defaultCcyMapping },
+    function () {
+      if (chrome.extension.lastError) {
+        console.log("Got expected error: " + chrome.extension.lastError.message);
+      } else {
+        prepareContextMenuBySetting(defaultCcyMapping);
+      }
+    });
 }
 
-function prepareContextMenuBySetting(mappings){
+function prepareContextMenuBySetting(mappings) {
   chrome.contextMenus.removeAll();
   chrome.contextMenus.create(
     { id: "rootMenu", title: "將所選金額： %s", contexts: ["selection"] },
@@ -111,19 +87,106 @@ function prepareContextMenuBySetting(mappings){
       }
     });
   mappings.forEach(map => {
+    currencies = map.split("|");
     chrome.contextMenus.create(
-      { id: `${map[0]}to${map[1]}`, title: `${map[0]} => ${map[1]}`, type: "normal", parentId: "rootMenu", contexts: ["selection"] });
+      { id: `${currencies[0]}to${currencies[1]}`, title: `${currencies[0]} => ${currencies[1]}`, type: "normal", parentId: "rootMenu", contexts: ["selection"] });
   })
+
+  chrome.contextMenus.onClicked.addListener(
+    (info, tab) => {
+      let rate = null;
+      rateKey = info.menuItemId.split("to");
+      makeExchange(rateKey, info)
+    }
+  );
 
 }
 
-chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {  
-  console.log(message);
-
-  if(message.event === "updateMenu"){
+function getCurrentMappings() {
+  return new Promise(function (resolve, reject) {
     chrome.storage.local.get("currencyMappings", function (result) {
-      prepareContextMenuBySetting(result.currencyMappings);
+      resolve(result.currencyMappings);
+    });
+  });
+}
+
+function setCurrentMappings(mappingSet) {
+  return new Promise(function (resolve, reject) {
+    chrome.storage.local.set({ "currencyMappings": [...mappingSet] }, function (result) {
+      resolve();
+    });
+  });
+}
+
+function refreshOptions(){
+  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+    chrome.tabs.sendMessage(tabs[0].id, { "event": "refreshOptions"}, function (response) {
+      console.log(response);
+    });
+  });
+}
+
+function addCurrencyMapping(newCcyMap) {
+  if (newCcyMap && newCcyMap[0] && newCcyMap[1]) {
+    let mappings = getCurrentMappings().then(mappings => {
+      let mappingSet = new Set(mappings);
+      mappingSet.add(`${newCcyMap[0]}|${newCcyMap[1]}`);
+      setCurrentMappings(mappingSet).then(element => {
+        updateMenu();
+        console.log("addCurrencyMapping done");
+        refreshOptions();
+        return mappingSet;
+      });
     });
   }
-  sendResponse({result: "success"});  
-});
+}
+
+function removeFromCurrencyMapping(mapToDelete) {
+  if (mapToDelete && mapToDelete[0] && mapToDelete[1]) {
+    let mappings = getCurrentMappings().then(mappings => {
+      let mappingSet = new Set(mappings);
+      mappingSet.delete(`${mapToDelete[0]}|${mapToDelete[1]}`);
+      console.log("mappingSet",mappingSet, " mapToDelete ",mapToDelete);
+
+      setCurrentMappings(mappingSet).then(element => {
+        updateMenu();
+        console.log("addCurrencyMapping done");
+        refreshOptions();
+        return mappingSet;
+      });
+    });
+  }
+}
+
+
+function updateMenu() {
+  chrome.storage.local.get("currencyMappings", function (result) {
+    prepareContextMenuBySetting(result.currencyMappings);
+  });
+}
+
+function eventListener(message, sender, sendResponse) {
+  if (message.event === "updateMenu") {
+    chrome.storage.local.get("currencyMappings", function (result) {
+      prepareContextMenuBySetting(result.currencyMappings);
+      sendResponse({ result: "update menu completed" });
+    });
+  } else if (message.event === "deleteMap") {
+    console.log("deleteMap ", message.data);
+    const result = removeFromCurrencyMapping(message.data);
+    sendResponse(result);
+  } else if (message.event === "addMap") {
+    console.log("addMap ", message.data);
+    const result = addCurrencyMapping(message.data);
+    console.log("addMap2 ", message.data);
+
+    sendResponse(result);
+    console.log("addMap 3", message.data);
+
+  } else {
+    sendResponse({ result: "NA" });
+  }
+}
+
+
+chrome.runtime.onMessage.addListener(eventListener);

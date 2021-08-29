@@ -1,35 +1,40 @@
-//TODO add remove currency map function
+//TODO Avoid much IO process. make background return new map
 
 function displayCurrentMappingList() {
     chrome.storage.local.get("currencyMappings", function (result) {
-        console.log('Value set is ' + JSON.stringify(result));
 
         result.currencyMappings.forEach(element => {
-
+            const map =element.split("|");
             var node = document.createElement("LI");
-            var textNode = document.createTextNode(`${element[0]} -> ${element[1]}`);
+            var textNode = document.createTextNode(`${map[0]} -> ${map[1]}`);
             node.appendChild(textNode);
+            var button = document.createElement("BUTTON");
+            button.setAttribute("id", `delete-${map[0]}-${map[1]}`)
+            button.innerHTML="X";
+            button.addEventListener("click", deleteSelectMap( [map[0], map[1]]));
+              node.appendChild(button);
             document.getElementById("mappingList").appendChild(node);
         });
     });
 }
 
+function deleteSelectMap(dataSet) {
+    return (event)=>{
+        chrome.runtime.sendMessage({ event: "deleteMap", data: dataSet}, function(response) {  
+            // refresh();
+            // chrome.runtime.sendMessage({ event: "updateMenu" }, function(response) {  
+            //     console.log(response);  
+            // });  
+        });
+    };
+  }
+
 function addCurrencyMapping(newCcyMap) {
     if(newCcyMap && newCcyMap[0] && newCcyMap[1]){
-        chrome.storage.local.get("currencyMappings", function (result) {
-            let mappingSet = new Set(result.currencyMappings);
-            mappingSet.add(newCcyMap);
-            chrome.storage.local.set({ "currencyMappings": [...mappingSet]},
-                function () {
-                    refresh();
-                    if (chrome.extension.lastError) {
-                        console.log("Got expected error: " + chrome.extension.lastError.message);
-                    }
-                    chrome.runtime.sendMessage({ event: "updateMenu" }, function(response) {  
-                        console.log(response);  
-                    });  
-                });
-        });
+        chrome.runtime.sendMessage({ event: "addMap", data: [newCcyMap[0], newCcyMap[1]]}, function(response) {  
+            // refresh();
+            console.log(response);  
+        }); 
     }
     
 }
@@ -41,10 +46,19 @@ function handleButtonClick(event) {
     }
 
 function refresh(){
+    console.log("REFRESH!");
     let mappingList =document.getElementById("mappingList");
     mappingList.innerHTML='';
     displayCurrentMappingList();
 }    
+
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+    if (request.event === "refreshOptions") {
+        refresh();
+        sendResponse("refreshOptions done");
+    }
+});
+
 
 document.getElementById("addCcyMapping").addEventListener("click",handleButtonClick);
 refresh();

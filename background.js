@@ -5,9 +5,15 @@ let color = '#3aa757';
 chrome.runtime.onStartup.addListener(() => {
   retrieveExchangeRate();
 });
-chrome.runtime.onInstalled.addListener(() => {
+chrome.runtime.onInstalled.addListener((reason) => {
+
   retrieveExchangeRate();
   setDefaultCcyMapping();
+  if(reason === 'install'){
+    chrome.tabs.create({
+      url: 'options.html'
+    });
+  }
 });
 
 
@@ -172,20 +178,15 @@ function eventListener(message, sender, sendResponse) {
       sendResponse({ result: "update menu completed" });
     });
   } else if (message.event === "deleteMap") {
-    console.log("deleteMap ", message.data);
     const result = removeFromCurrencyMapping(message.data);
     sendResponse(result);
+    console.log("deleteMap done: ", message.data);
   } else if (message.event === "addMap") {
-    console.log("addMap ", message.data);
     const result = addCurrencyMapping(message.data);
-    console.log("addMap2 ", message.data);
-
     sendResponse(result);
-    console.log("addMap 3", message.data);
+    console.log("addMap done: ", message.data);
 
-  } else {
-    sendResponse({ result: "NA" });
-  }
+  } 
 }
 
 

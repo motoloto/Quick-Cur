@@ -1,7 +1,7 @@
 {
     "name": "QuickCur 即時金額換匯幫手",
     "description": "將網頁上所選取的金額即時換匯成你要的幣別，簡單選取按右鍵便可顯示你要的金額．",
-    "version": "1.0",
+    "version": "1.0.0",
     "manifest_version": 3,
     "background": {
         "service_worker": "background-wrapper.js"

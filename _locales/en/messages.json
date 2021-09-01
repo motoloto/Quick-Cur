@@ -1,0 +1,10 @@
+{
+    "AppName": {
+        "message":"QuickCur - Currency Exchange Helper",
+        "description": "The title of the application, displayed in the web store."
+        }    ,
+    "AppDesc": {
+        "message":"Select the number on your page, right click and make currency exchange in fast way．",
+        "description":"The description of the application, displayed in the web store."
+    }
+}

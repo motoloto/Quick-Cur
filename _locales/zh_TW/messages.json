@@ -1,0 +1,11 @@
+
+{
+    "AppName": {
+        "message":"QuickCur 即時金額換匯幫手",
+        "description": "The title of the application, displayed in the web store."
+        }    ,
+    "AppDesc": {
+        "message":"將網頁上所選取的金額即時換匯成你要的幣別，簡單選取按右鍵便可顯示你要的金額．",
+        "description":"The description of the application, displayed in the web store."
+    }
+}

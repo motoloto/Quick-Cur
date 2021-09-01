@@ -21,10 +21,7 @@ function displayCurrentMappingList() {
 function deleteSelectMap(dataSet) {
     return (event)=>{
         chrome.runtime.sendMessage({ event: "deleteMap", data: dataSet}, function(response) {  
-            // refresh();
-            // chrome.runtime.sendMessage({ event: "updateMenu" }, function(response) {  
-            //     console.log(response);  
-            // });  
+            return true;
         });
     };
   }

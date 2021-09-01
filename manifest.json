@@ -1,13 +1,13 @@
 {
-    "name": "QuickCur 即時金額換匯幫手",
-    "description": "將網頁上所選取的金額即時換匯成你要的幣別，簡單選取按右鍵便可顯示你要的金額．",
+    "name": "__MSG_AppName__",
+    "description": "__MSG_AppDesc__",
     "version": "1.0.0",
     "manifest_version": 3,
     "background": {
         "service_worker": "background-wrapper.js"
     },
     "options_page": "options.html",
-    
+    "default_locale":"en",
     "permissions": [
         "storage",
         "activeTab",

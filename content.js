@@ -6,6 +6,14 @@ function removeElement(elementId){
 const elementId = "quick_cur";
 const NumberFormat = new Intl.NumberFormat('en-US');
 
+
+document.addEventListener("click", function(event){
+  if(event.target.id != elementId){
+    document.getElementById(elementId) && document.getElementById(elementId).remove();
+  }
+});
+
+
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   
   removeElement(elementId);
@@ -56,6 +64,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         selectionEl.style.boxShadow=" rgba(0, 0, 0, 0.2) 0px 1px 3px";
         selectionEl.innerHTML = `${popText}`;
         selectionEl.style.position = "absolute";
+        selectionEl.style.zIndex="10000000000000000";
 
         doc.body.appendChild(selectionEl);
       }

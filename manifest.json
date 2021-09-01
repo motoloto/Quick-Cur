@@ -11,10 +11,7 @@
     "permissions": [
         "storage",
         "activeTab",
-        "scripting",
-        "contextMenus",
-        "webRequest"
-        
+        "contextMenus"
     ],
     "externally_connectable": {
         "matches": ["https://tw.rter.info/capi.php"]

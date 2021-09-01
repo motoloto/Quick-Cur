@@ -1,12 +1,11 @@
 // background.js
 
-let color = '#3aa757';
+chrome.runtime.onMessage.addListener(eventListener);
 
 chrome.runtime.onStartup.addListener(() => {
   retrieveExchangeRate();
 });
 chrome.runtime.onInstalled.addListener((reason) => {
-
   retrieveExchangeRate();
   setDefaultCcyMapping();
   if(reason === 'install'){
@@ -16,6 +15,14 @@ chrome.runtime.onInstalled.addListener((reason) => {
   }
 });
 
+
+chrome.contextMenus.onClicked.addListener(
+  (info, tab) => {
+    console.log("item clicked");
+    let rateKey = info.menuItemId.split("to");
+    makeExchange(rateKey, info)
+  }
+);
 
 function getExchangeRateFromStore(currencyMap) {
   return new Promise(resolve => {
@@ -67,12 +74,13 @@ function retrieveExchangeRate() {
         });
     });
 }
-const defaultCcyMapping = [
-  "TWD|USD",
-  "USD|TWD",
-  "JPY|TWD"
-];
+
 function setDefaultCcyMapping() {
+  const defaultCcyMapping = [
+    "TWD|USD",
+    "USD|TWD",
+    "JPY|TWD"
+  ];
   chrome.storage.local.set({ "currencyMappings": defaultCcyMapping },
     function () {
       if (chrome.extension.lastError) {
@@ -98,13 +106,7 @@ function prepareContextMenuBySetting(mappings) {
       { id: `${currencies[0]}to${currencies[1]}`, title: `${currencies[0]} => ${currencies[1]}`, type: "normal", parentId: "rootMenu", contexts: ["selection"] });
   })
 
-  chrome.contextMenus.onClicked.addListener(
-    (info, tab) => {
-      let rate = null;
-      rateKey = info.menuItemId.split("to");
-      makeExchange(rateKey, info)
-    }
-  );
+  
 
 }
 
@@ -173,10 +175,12 @@ function updateMenu() {
 
 function eventListener(message, sender, sendResponse) {
   if (message.event === "updateMenu") {
-    chrome.storage.local.get("currencyMappings", function (result) {
-      prepareContextMenuBySetting(result.currencyMappings);
-      sendResponse({ result: "update menu completed" });
-    });
+    updateMenu();
+    sendResponse({ result: "update menu completed" });
+    // chrome.storage.local.get("currencyMappings", function (result) {
+    //   prepareContextMenuBySetting(result.currencyMappings);
+    //   sendResponse({ result: "update menu completed" });
+    // });
   } else if (message.event === "deleteMap") {
     const result = removeFromCurrencyMapping(message.data);
     sendResponse(result);
@@ -190,4 +194,3 @@ function eventListener(message, sender, sendResponse) {
 }
 
 
-chrome.runtime.onMessage.addListener(eventListener);

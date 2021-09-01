@@ -71,16 +71,36 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
       // Find markerEl position http://www.quirksmode.org/js/findpos.html
       var obj = markerEl;
-      var left = 0, top = 20;
-      do {
-        left += obj.offsetLeft;
-        top += obj.offsetTop;
-      } while (obj = obj.offsetParent);
+      var padLeft = 0, padTop = 0;
+
+      // old way to get element position
+      // do {
+      //   padLeft += obj.offsetLeft;
+      //   padTop += obj.offsetTop;
+      // } while (obj = obj.offsetParent);
 
       // Move the button into place.
       // Substitute your jQuery stuff in here
-      selectionEl.style.left = left + "px";
-      selectionEl.style.top = top + "px";
+      // selectionEl.style.left = (left+document.body.scrollLeft) + "px";
+      // selectionEl.style.top = (top+document.body.scrollTop) + "px";
+
+      // new way to get position
+      var scrollTop = 
+    document.documentElement.scrollTop 
+    || document.body.scrollTop 
+    || 0;
+    var scrollLeft = 
+    document.documentElement.scrollLeft 
+    || document.body.scrollLeft 
+    || 0;
+      var selection =  document.getSelection();
+      var rect = selection.getRangeAt(0).getBoundingClientRect();
+      var scrollTop = scrollTop+ rect.top +  padTop + rect.height ;
+      var scrollLeft = scrollLeft +rect.left + padLeft + rect.width ; 
+      selectionEl.style.left = scrollLeft + "px";
+      selectionEl.style.top = scrollTop + "px";
+
+      
 
       markerEl.parentNode.removeChild(markerEl);
     }

@@ -7,3 +7,6 @@ HOW TO USE:
     3. Choose the exchange action you want to make
     
 The realtime exchange data source: https://tw.rter.info/howto_currencyapi.php
+
+Google Chrome Store: 
+    https://chrome.google.com/webstore/detail/quickcur-即時金額換匯幫手/nenjmmjmglcjbiabpgjggehahbdejoon?hl=zh-TW&authuser=0

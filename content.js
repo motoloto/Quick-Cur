@@ -1,21 +1,21 @@
-function removeElement(elementId){
+function removeElement(elementId) {
   var elem = document.getElementById(elementId);
-  if(elem) elem.remove();
+  if (elem) elem.remove();
 }
 
 const elementId = "quick_cur";
 const NumberFormat = new Intl.NumberFormat('en-US');
 
 
-document.addEventListener("click", function(event){
-  if(event.target.id != elementId){
+document.addEventListener("click", function (event) {
+  if (event.target.id != elementId) {
     document.getElementById(elementId) && document.getElementById(elementId).remove();
   }
 });
 
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  
+
   removeElement(elementId);
   const popText = `${request.targetCcy} $ ${NumberFormat.format(request.amount.toFixed(2))}`;
   // Callback for that request
@@ -57,14 +57,8 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       if (!selectionEl) {
         selectionEl = doc.createElement("div");
         selectionEl.id = elementId;
-        selectionEl.style.border = "solid darkblue 1px";
-        selectionEl.style.borderRadius= "5px";
-        selectionEl.style.backgroundColor = "GhostWhite";
-        selectionEl.style.padding="2px 4px 2px 4px";
-        selectionEl.style.boxShadow=" rgba(0, 0, 0, 0.2) 0px 1px 3px";
         selectionEl.innerHTML = `${popText}`;
-        selectionEl.style.position = "absolute";
-        selectionEl.style.zIndex="10000000000000000";
+        selectionEl.className = "content-popup";
 
         doc.body.appendChild(selectionEl);
       }
@@ -85,22 +79,22 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       // selectionEl.style.top = (top+document.body.scrollTop) + "px";
 
       // new way to get position
-      var scrollTop = 
-    document.documentElement.scrollTop 
-    || document.body.scrollTop 
-    || 0;
-    var scrollLeft = 
-    document.documentElement.scrollLeft 
-    || document.body.scrollLeft 
-    || 0;
-      var selection =  document.getSelection();
+      var scrollTop =
+        document.documentElement.scrollTop
+        || document.body.scrollTop
+        || 0;
+      var scrollLeft =
+        document.documentElement.scrollLeft
+        || document.body.scrollLeft
+        || 0;
+      var selection = document.getSelection();
       var rect = selection.getRangeAt(0).getBoundingClientRect();
-      var scrollTop = scrollTop+ rect.top +  padTop + rect.height ;
-      var scrollLeft = scrollLeft +rect.left + padLeft + rect.width ; 
+      var scrollTop = scrollTop + rect.top + padTop + rect.height;
+      var scrollLeft = scrollLeft + rect.left + padLeft + rect.width;
       selectionEl.style.left = scrollLeft + "px";
       selectionEl.style.top = scrollTop + "px";
 
-      
+
 
       markerEl.parentNode.removeChild(markerEl);
     }

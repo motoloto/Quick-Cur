@@ -7,7 +7,7 @@
         "service_worker": "background-wrapper.js"
     },
     "options_page": "options.html",
-    "default_locale":"en",
+    "default_locale":"zh_TW",
     "permissions": [
         "storage",
         "activeTab",
@@ -22,7 +22,8 @@
       "content_scripts": [
         {
           "matches": ["<all_urls>"],
-          "js": ["content.js"]
+          "js": ["content.js"],
+          "css": [ "content.css" ]
         }
       ],
     "action": {

@@ -1,0 +1,12 @@
+.content-popup {
+    -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, .2);
+    -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, .2);
+    box-shadow: 0 4px 4px rgba(0, 0, 0, .2);
+    background-color: #fff;
+    border: 2px solid;
+    border-radius: 0px 17px 17px 17px;
+    border-color: #bbb #bbb #a8a8a8;
+    padding: 10px 16px;
+    position: absolute;
+    z-index: 10000000000000000;
+}

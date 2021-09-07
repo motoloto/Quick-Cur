@@ -12,7 +12,6 @@ Google Chrome Store:
     https://chrome.google.com/webstore/detail/quickcur-即時金額換匯幫手/nenjmmjmglcjbiabpgjggehahbdejoon?hl=zh-TW&authuser=0
 
 
-
 ### UPDATE HISTORY: ###
 
  * v1.0.0

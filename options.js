@@ -4,15 +4,21 @@ function displayCurrentMappingList() {
     chrome.storage.local.get("currencyMappings", function (result) {
 
         result.currencyMappings.forEach(element => {
-            const map =element.split("|");
             var node = document.createElement("LI");
-            var textNode = document.createTextNode(`${map[0]} -> ${map[1]}`);
-            node.appendChild(textNode);
+            node.className="list-group-item";
+
+            const map =element.split("|");
+
             var button = document.createElement("BUTTON");
             button.setAttribute("id", `delete-${map[0]}-${map[1]}`)
+            button.className=" btn-danger";
             button.innerHTML="X";
             button.addEventListener("click", deleteSelectMap( [map[0], map[1]]));
-              node.appendChild(button);
+            node.appendChild(button);
+
+            var textNode = document.createTextNode(`${map[0]} -> ${map[1]}`);
+            node.appendChild(textNode);
+            
             document.getElementById("mappingList").appendChild(node);
         });
     });

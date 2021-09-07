@@ -18,9 +18,12 @@ chrome.runtime.onInstalled.addListener((reason) => {
 
 chrome.contextMenus.onClicked.addListener(
   (info, tab) => {
-    console.log("item clicked");
+    if(info.menuItemId === 'option'){
+      chrome.runtime.openOptionsPage() ;
+    }else{
     let rateKey = info.menuItemId.split("to");
     makeExchange(rateKey, info)
+    }
   }
 );
 
@@ -83,9 +86,14 @@ function retrieveExchangeRate() {
 
 function setDefaultCcyMapping() {
   const defaultCcyMapping = [
-    "TWD|USD",
+    "CNH|TWD",
     "USD|TWD",
-    "JPY|TWD"
+    "JPY|TWD",
+    "CAD|USD",
+    "CNH|USD",
+    "TWD|USD",
+    "EUR|USD",
+    "JPY|USD"
   ];
   chrome.storage.local.set({ "currencyMappings": defaultCcyMapping },
     function () {
@@ -112,7 +120,9 @@ function prepareContextMenuBySetting(mappings) {
       { id: `${currencies[0]}to${currencies[1]}`, title: `${currencies[0]} => ${currencies[1]}`, type: "normal", parentId: "rootMenu", contexts: ["selection"] });
   })
 
-  
+  //shortcut to option page
+  chrome.contextMenus.create(
+    { id: `option`, title: `Can't find I want`, type: "normal", parentId: "rootMenu", contexts: ["selection"] });
 
 }
 

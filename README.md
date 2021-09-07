@@ -21,3 +21,4 @@ Google Chrome Store:
    * Move Custom exchange map to option page
       * Add link in context menu to setting page
       * Support more currency
+      * Multi language support

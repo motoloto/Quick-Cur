@@ -24,6 +24,26 @@ function displayCurrentMappingList() {
     });
 }
 
+function displayAvailableCcyList() {
+    chrome.storage.local.get("exchangeRates", function (result) {
+        for ( const [key] of Object.entries(result.exchangeRates)) {
+            // extract currency from USDXXX
+            if(key.startsWith('USD')){
+                const ccy = key.slice(3);
+                console.log(ccy);
+                var option = document.createElement("OPTION");
+                option.innerHTML=`${ccy}`;
+                option.className="list-group-item";
+    
+                document.getElementById("sourceCcy").appendChild(option);
+                var option2 = option.cloneNode(true);
+                document.getElementById("targetCcy").appendChild(option2);
+            }
+          }
+    
+    });
+}
+
 function deleteSelectMap(dataSet) {
     return (event)=>{
         chrome.runtime.sendMessage({ event: "deleteMap", data: dataSet}, function(response) {  
@@ -53,6 +73,7 @@ function refresh(){
     let mappingList =document.getElementById("mappingList");
     mappingList.innerHTML='';
     displayCurrentMappingList();
+    displayAvailableCcyList();
 }    
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
@@ -61,7 +82,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         sendResponse("refreshOptions done");
     }
 });
-
 
 document.getElementById("addCcyMapping").addEventListener("click",handleButtonClick);
 refresh();

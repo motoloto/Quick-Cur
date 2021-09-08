@@ -91,9 +91,7 @@ function setDefaultCcyMapping() {
     "JPY|TWD",
     "CAD|USD",
     "CNH|USD",
-    "TWD|USD",
-    "EUR|USD",
-    "JPY|USD"
+    "EUR|USD"
   ];
   chrome.storage.local.set({ "currencyMappings": defaultCcyMapping },
     function () {

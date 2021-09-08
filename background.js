@@ -26,6 +26,17 @@ chrome.contextMenus.onClicked.addListener(
     }
   }
 );
+function getMessage(key){
+  // Google Manifest 3 bug. can't use it. https://groups.google.com/a/chromium.org/g/chromium-extensions/c/dG6JeZGkN5w
+  // return chrome.i18n.getMessage(key);
+  const lang = navigator.language;
+  console.log(lang);
+  if(lang== "zh"){
+    return "轉換金額";
+  }else{
+    return "Convert Number"
+  }
+}
 
 function getExchangeRateFromStore(currencyMap) {
   return new Promise(resolve => {
@@ -105,8 +116,9 @@ function setDefaultCcyMapping() {
 
 function prepareContextMenuBySetting(mappings) {
   chrome.contextMenus.removeAll();
+  const selectedAmount = getMessage("selectedAmount");
   chrome.contextMenus.create(
-    { id: "rootMenu", title: "將所選金額： %s", contexts: ["selection"] },
+    { id: "rootMenu", title: selectedAmount+"： %s", contexts: ["selection"] },
     function () {
       if (chrome.extension.lastError) {
         console.log("Got expected error: " + chrome.extension.lastError.message);

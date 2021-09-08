@@ -1,10 +1,45 @@
 {
     "AppName": {
-        "message":"QuickCur - Currency Exchange Helper",
+        "message":"QuickCur - Bubble Currency Exchange Helper",
         "description": "The title of the application, displayed in the web store."
         }    ,
     "AppDesc": {
-        "message":"Select the number on your page, right click and make currency exchange in fast way．",
+        "message":"Select the number on your page, right click and show result in bubble. SUPER FAST WAY!",
         "description":"The description of the application, displayed in the web store."
+    },
+    "AppShortName": {
+        "message":"QuickCur",
+        "description": "The short title of the application, displayed in the web store."
+    },
+    "usage": {
+        "message":"HOW TO USE"
+    },
+    "method1": {
+        "message":"Select the number text on page"
+    },
+    "method2": {
+        "message":"Right Click on it"
+    },
+    "method3": {
+        "message":"Choose the exchange action you want to make"
+    },
+    "method4": {
+        "message":"The result will show next to your number in bubble"
+    },
+    "chooseSourceCcy": {
+        "message":"Choose Source Currency"
+    },
+    "chooseTargetCcy": {
+        "message":"Choose Target Currency"
+    },
+    "addExMap": {
+        "message":"Add exchange mapping"
+    },
+    "currentExMap": {
+        "message":"Current Exchange Map"
+    },
+    "selectedAmount": {
+        "message":"Convert Currency"
     }
 }
+

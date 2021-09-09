@@ -1,10 +1,6 @@
 
 
-function setPageBackgroundColor() {
-  chrome.storage.sync.get("color", ({ color }) => {
-    document.body.style.backgroundColor = color;
-  });
-}
+
 
 function getExchangeRateFromStore(currencyMap) {
   return new Promise(resolve => {
@@ -20,3 +16,7 @@ chrome.storage.local.get("dataUpdateTime", function (result) {
   let changeColor = window.document.getElementById("storageUpdateTime");
   changeColor.innerHTML=`${result.dataUpdateTime}`;
 });
+
+window.document.getElementById("toOption").addEventListener("click", (event)=>{
+  chrome.runtime.openOptionsPage() ;
+})

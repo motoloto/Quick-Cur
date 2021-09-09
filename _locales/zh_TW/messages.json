@@ -1,11 +1,45 @@
-
 {
     "AppName": {
         "message":"QuickCur 即時金額換匯幫手",
         "description": "The title of the application, displayed in the web store."
         }    ,
     "AppDesc": {
-        "message":"將網頁上所選取的金額即時換匯成你要的幣別，簡單選取按右鍵便可顯示你要的金額．",
+        "message":"將網頁上所選取的金額即時換匯成你要的幣別，簡單選取按右鍵．算完的金額會顯示在原始金額旁邊",
         "description":"The description of the application, displayed in the web store."
+    },
+    "AppShortName": {
+        "message":"QuickCur",
+        "description": "The short title of the application, displayed in the web store."
+    },
+    "usage": {
+        "message":"使用方法"
+    },
+    "method1": {
+        "message":"將網頁上的數字匡起來"
+    },
+    "method2": {
+        "message":"在反白部分按右鍵"
+    },
+    "method3": {
+        "message":"選擇想要轉換的幣別"
+    },
+    "method4": {
+        "message":"轉換的金額會顯示在原本的金額旁邊"
+    },
+    "chooseSourceCcy": {
+        "message":"選擇來源幣別"
+    },
+    "chooseTargetCcy": {
+        "message":"選擇目標幣別"
+    },
+    "addExMap": {
+        "message":"新增轉換幣別"
+    },
+    "currentExMap": {
+        "message":"目前的匯率轉換"
+    },
+    "selectedAmount": {
+        "message":"將所選金額"
     }
 }
+

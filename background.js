@@ -18,11 +18,25 @@ chrome.runtime.onInstalled.addListener((reason) => {
 
 chrome.contextMenus.onClicked.addListener(
   (info, tab) => {
-    console.log("item clicked");
+    if(info.menuItemId === 'option'){
+      chrome.runtime.openOptionsPage() ;
+    }else{
     let rateKey = info.menuItemId.split("to");
     makeExchange(rateKey, info)
+    }
   }
 );
+function getMessage(key){
+  // Google Manifest 3 bug. can't use it. https://groups.google.com/a/chromium.org/g/chromium-extensions/c/dG6JeZGkN5w
+  // return chrome.i18n.getMessage(key);
+  const lang = navigator.language;
+  console.log(lang);
+  if(lang== "zh"){
+    return "轉換金額";
+  }else{
+    return "Convert Number"
+  }
+}
 
 function getExchangeRateFromStore(currencyMap) {
   return new Promise(resolve => {
@@ -83,9 +97,12 @@ function retrieveExchangeRate() {
 
 function setDefaultCcyMapping() {
   const defaultCcyMapping = [
-    "TWD|USD",
+    "CNH|TWD",
     "USD|TWD",
-    "JPY|TWD"
+    "JPY|TWD",
+    "CAD|USD",
+    "CNH|USD",
+    "EUR|USD"
   ];
   chrome.storage.local.set({ "currencyMappings": defaultCcyMapping },
     function () {
@@ -99,8 +116,9 @@ function setDefaultCcyMapping() {
 
 function prepareContextMenuBySetting(mappings) {
   chrome.contextMenus.removeAll();
+  const selectedAmount = getMessage("selectedAmount");
   chrome.contextMenus.create(
-    { id: "rootMenu", title: "將所選金額： %s", contexts: ["selection"] },
+    { id: "rootMenu", title: selectedAmount+"： %s", contexts: ["selection"] },
     function () {
       if (chrome.extension.lastError) {
         console.log("Got expected error: " + chrome.extension.lastError.message);
@@ -112,7 +130,9 @@ function prepareContextMenuBySetting(mappings) {
       { id: `${currencies[0]}to${currencies[1]}`, title: `${currencies[0]} => ${currencies[1]}`, type: "normal", parentId: "rootMenu", contexts: ["selection"] });
   })
 
-  
+  //shortcut to option page
+  chrome.contextMenus.create(
+    { id: `option`, title: `Can't find I want`, type: "normal", parentId: "rootMenu", contexts: ["selection"] });
 
 }
 

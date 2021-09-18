@@ -22,3 +22,5 @@ Google Chrome Store:
       * Add link in context menu to setting page
       * Support more currency
       * Multi language support
+ * v1.1.1
+   * Fix issue that add currency button not working

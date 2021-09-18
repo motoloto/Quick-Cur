@@ -53,7 +53,7 @@ function displayAvailableCcyList() {
             // extract currency from USDXXX
             if(key.startsWith('USD')){
                 const ccy = key.slice(3);
-                console.log(ccy);
+                // console.log(ccy);
                 var option = document.createElement("OPTION");
                 option.innerHTML=`${ccy}`;
                 option.className="list-group-item";
@@ -107,5 +107,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     }
 });
 
-document.getElementById("addCcyMapping").addEventListener("click",handleButtonClick);
 refresh();
+document.getElementById("addCcyMapping").addEventListener("click",handleButtonClick);
+

@@ -62,6 +62,7 @@ function makeExchange(rateKey, info) {
       chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
         chrome.tabs.sendMessage(tabs[0].id, { "amount": amount, "targetCcy": rateKey[1] }, function (response) {
           console.log(response);
+          return true;
         });
       });
     }
@@ -100,6 +101,7 @@ function setDefaultCcyMapping() {
     "CNH|TWD",
     "USD|TWD",
     "JPY|TWD",
+    "EUR|TWD",
     "CAD|USD",
     "CNH|USD",
     "EUR|USD"

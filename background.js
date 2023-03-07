@@ -5,10 +5,14 @@ chrome.runtime.onMessage.addListener(eventListener);
 chrome.runtime.onStartup.addListener(() => {
   retrieveExchangeRate();
 });
-chrome.runtime.onInstalled.addListener((reason) => {
+chrome.runtime.onInstalled.addListener((details) => {
   retrieveExchangeRate();
   setDefaultCcyMapping();
-  if(reason === 'install'){
+  if(details.reason === 'install'){
+    chrome.tabs.create({
+      url: 'options.html'
+    });
+  }else if(details.reason == "update"){
     chrome.tabs.create({
       url: 'options.html'
     });
@@ -49,9 +53,11 @@ function getExchangeRateFromStore(currencyMap) {
 
 function extractOnlyNumber(text){
   text = /\-?([1-9]{1}[0-9]{0,2}(\,\d{3})*(\.\d{0,2})?|[1-9]{1}\d{0,}(\.\d{0,2})?|0(\.\d{0,2})?|(\.\d{1,2}))|^\-?\$?([1-9]{1}\d{0,2}(\,\d{3})*(\.\d{0,2})?|[1-9]{1}\d{0,}(\.\d{0,2})?|0(\.\d{0,2})?|(\.\d{1,2}))|^\(\$?([1-9]{1}\d{0,2}(\,\d{3})*(\.\d{0,2})?|[1-9]{1}\d{0,}(\.\d{0,2})?|0(\.\d{0,2})?|(\.\d{1,2}))\)/.exec(text);
-  text = text[0].replace(',','');
+  text = text[0].replaceAll(',','');
   return text;
 }
+
+
 
 function makeExchange(rateKey, info) {
   Promise.all([getExchangeRateFromStore(`USD${rateKey[0]}`), getExchangeRateFromStore(`USD${rateKey[1]}`)]).then(values => {
@@ -59,7 +65,7 @@ function makeExchange(rateKey, info) {
     const rateToTarget = values[1].Exrate;
     const amount = Number(extractOnlyNumber(info.selectionText)) / rateToUSD * rateToTarget;
     if (!isNaN(amount)) {
-      chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+      chrome.tabs.query({active: true, lastFocusedWindow: true}, function (tabs) {
         chrome.tabs.sendMessage(tabs[0].id, { "amount": amount, "targetCcy": rateKey[1] }, function (response) {
           console.log(response);
           return true;

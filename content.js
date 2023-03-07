@@ -102,5 +102,3 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   })(popText);
   sendResponse({ message: 'Background has received that message ?' });
 });
-
-// 

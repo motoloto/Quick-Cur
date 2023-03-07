@@ -24,3 +24,7 @@ Google Chrome Store:
       * Multi language support
  * v1.1.1
    * Fix issue that add currency button not working
+
+ * v1.2.0
+   * Fix the issue that functionality failure which deal with number more than million.
+   * Add black text color on pop-up  

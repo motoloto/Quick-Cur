@@ -17,7 +17,7 @@ document.addEventListener("click", function (event) {
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
   removeElement(elementId);
-  const popText = `${request.targetCcy} $ ${NumberFormat.format(request.amount.toFixed(2))}`;
+  const popText = `${request.targetCcy} $ ${NumberFormat.format(request.amount.toFixed(2))} &emsp; <b>Rate:${request.totalRate.toFixed(3)}</b>`;
   // Callback for that request
   // markSelection();
   (function (popText) {
@@ -100,5 +100,5 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     }
 
   })(popText);
-  sendResponse({ message: 'Background has received that message ?' });
+  sendResponse({ message: 'Currency exchanging is finished' });
 });

@@ -8,7 +8,7 @@
         "description":"The description of the application, displayed in the web store."
     },
     "AppShortName": {
-        "message":"QuickCur  v1.2.0",
+        "message":"QuickCur  v1.2.1",
         "description": "The short title of the application, displayed in the web store."
     },
     "installationWarning": {

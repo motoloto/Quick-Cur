@@ -108,5 +108,5 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 });
 
 refresh();
-document.getElementById("addCcyMapping").addEventListener("click",handleButtonClick);
 
+document.getElementById("addCcyMapping").addEventListener("click",handleButtonClick);

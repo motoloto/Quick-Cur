@@ -8,8 +8,11 @@
         "description":"The description of the application, displayed in the web store."
     },
     "AppShortName": {
-        "message":"QuickCur",
+        "message":"QuickCur v1.2.0",
         "description": "The short title of the application, displayed in the web store."
+    },
+    "installationWarning": {
+        "message":"注意: 此擴充元件更新後必須重新新增自訂的幣別轉換!"
     },
     "usage": {
         "message":"使用方法"

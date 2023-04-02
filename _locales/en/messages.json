@@ -8,8 +8,11 @@
         "description":"The description of the application, displayed in the web store."
     },
     "AppShortName": {
-        "message":"QuickCur",
+        "message":"QuickCur  v1.2.0",
         "description": "The short title of the application, displayed in the web store."
+    },
+    "installationWarning": {
+        "message":"ATTENTION: You have to add the custom currency exchange rules once this extension is installed or upgraded!"
     },
     "usage": {
         "message":"HOW TO USE"

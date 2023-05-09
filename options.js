@@ -218,6 +218,8 @@ function getMessage(key){
     return chrome.i18n.getMessage(key);
 }
 
+
+
 function displayCurrentMappingList() {
     chrome.storage.local.get("currencyMappings", function (result) {
 
@@ -233,7 +235,7 @@ function displayCurrentMappingList() {
 
         result.currencyMappings.forEach(element => {
             var node = document.createElement("div");
-            node.className="list-group-item list-group-item-action";
+            node.className="list-group-item list-group-item-action draggable";
 
             const map =element.split("|");
 
@@ -248,10 +250,24 @@ function displayCurrentMappingList() {
 
             var targetCur = createTextElement(`${map[1]}`);
             node.appendChild(targetCur);
+            node.setAttribute("mappingCode",element);
 
             document.getElementById("mappingList").appendChild(node);
 
-            slist(document.getElementById("mappingList"));
+            // slist(document.getElementById("mappingList"));
+        });
+
+        $("#mappingList").sortable({
+          update: function(event, ui) {
+            var newMapping = [];
+            $("#mappingList .draggable").each(function() {
+              newMapping.push($(this).attr("mappingCode"));
+            });
+            chrome.runtime.sendMessage({ event: "renewMap", data: newMapping}, function(response) {  
+              return true;
+            });
+
+          }
         });
     });
 }
@@ -294,43 +310,6 @@ function createDeleteButton(action){
 }
 
 
-function displayAvailableCcyList() {
-
-    for ( const [key] of Object.entries(Currencies)) {
-        // extract currency from USDXXX
-      
-            const ccy = key.slice(3);
-            // console.log(ccy);
-            var option = document.createElement("OPTION");
-            option.innerHTML=`${key} | ${Currencies[key]}`;
-            option.className="list-group-item";
-            option.setAttribute("code", key);
-
-            document.getElementById("sourceCcy").appendChild(option);
-            var option2 = option.cloneNode(true);
-            document.getElementById("targetCcy").appendChild(option2);
-        
-      }
-
-    // chrome.storage.local.get("exchangeRates", function (result) {
-    //     for ( const [key] of Object.entries(result.exchangeRates)) {
-    //         // extract currency from USDXXX
-    //         if(key.startsWith('USD')){
-    //             const ccy = key.slice(3);
-    //             // console.log(ccy);
-    //             var option = document.createElement("OPTION");
-    //             option.innerHTML=`${ccy}`;
-    //             option.className="list-group-item";
-    
-    //             document.getElementById("sourceCcy").appendChild(option);
-    //             var option2 = option.cloneNode(true);
-    //             document.getElementById("targetCcy").appendChild(option2);
-    //         }
-    //       }
-    
-    // });
-}
-
 function deleteSelectMap(dataSet) {
     return (event)=>{
         chrome.runtime.sendMessage({ event: "deleteMap", data: dataSet}, function(response) {  
@@ -342,7 +321,7 @@ function deleteSelectMap(dataSet) {
 function addCurrencyMapping(source, target) {
     if(source && target){
         chrome.runtime.sendMessage({ event: "addMap", data: [source, target]}, function(response) {  
-            // refresh();
+            refresh();
             console.log(response);  
         }); 
     }
@@ -350,10 +329,38 @@ function addCurrencyMapping(source, target) {
 }
 
 function handleButtonClick(event) {
-      const sourceCcy = document.getElementById("sourceCcy").selectedOptions[0] ;
-      const targetCcy = document.getElementById("targetCcy").selectedOptions[0];
-      addCurrencyMapping(sourceCcy.getAttribute("code"), targetCcy.getAttribute("code"));
-    }
+      const sourceCcy = document.getElementById("sourceCcy").value;
+      const targetCcy = document.getElementById("targetCcy").value;
+      addCurrencyMapping(sourceCcy.split("|")[0], targetCcy.split("|")[0]);
+}
+
+
+function substringMatcher (strs) {
+        return function findMatches(q, cb) {
+          var matches, substringRegex;
+      
+          // an array that will be populated with substring matches
+          matches = [];
+      
+          // regex used to determine if a string contains the substring `q`
+          substrRegex = new RegExp(q, 'i');
+      
+          if(q===''){
+            cb(strs);
+          }else{
+            // iterate through the pool of strings and for any string that
+            // contains the substring `q`, add it to the `matches` array
+            $.each(strs, function(i, str) {
+              if (substrRegex.test(str)) {
+                matches.push(str);
+              }
+            });
+        
+            cb(matches);
+
+          }
+        };
+      };
 
 function refresh(){
     console.log("REFRESH!");
@@ -361,7 +368,8 @@ function refresh(){
     let mappingList =document.getElementById("mappingList");
     mappingList.innerHTML='';
     displayCurrentMappingList();
-    displayAvailableCcyList();
+
+    
 }    
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
@@ -426,5 +434,16 @@ function slist (target) {
   }
 
 refresh();
+
+$('.typeaheadInput').typeahead({
+  highlight: true,
+  minLength: 0
+  },
+  {
+    name: 'currency',
+  limit: 999,
+    source: substringMatcher(Object.entries(Currencies).map( key => `${key[0]} | ${key[1]}`))
+  });
+
 
 document.getElementById("addCcyMapping").addEventListener("click",handleButtonClick);

@@ -13,6 +13,10 @@
         "activeTab",
         "contextMenus"
     ],
+    "web_accessible_resources": [{
+      "matches": ["<all_urls>"],
+      "resources": ["lib/TypeAhead.js","lib/jquery-ui.min.js","lib/jquery-3.6.4.min.js"]
+    }],
     "externally_connectable": {
         "matches": ["https://tw.rter.info/capi.php"]
       },

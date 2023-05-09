@@ -170,6 +170,18 @@ function refreshOptions(){
   });
 }
 
+function renewCurrencyMapping(newCcyMap) {
+  
+  setCurrentMappings(newCcyMap).then(element => {
+    updateMenu();
+    console.log("Renew CurrencyMapping done");
+    // refreshOptions();
+    return newCcyMap;
+  });
+  
+}
+
+
 function addCurrencyMapping(newCcyMap) {
   if (newCcyMap && newCcyMap[0] && newCcyMap[1]) {
     let mappings = getCurrentMappings().then(mappings => {
@@ -177,7 +189,7 @@ function addCurrencyMapping(newCcyMap) {
       mappingSet.add(`${newCcyMap[0]}|${newCcyMap[1]}`);
       setCurrentMappings(mappingSet).then(element => {
         updateMenu();
-        console.log("addCurrencyMapping done");
+        console.log("Update CurrencyMapping done");
         refreshOptions();
         return mappingSet;
       });
@@ -190,11 +202,11 @@ function removeFromCurrencyMapping(mapToDelete) {
     let mappings = getCurrentMappings().then(mappings => {
       let mappingSet = new Set(mappings);
       mappingSet.delete(`${mapToDelete[0]}|${mapToDelete[1]}`);
-      console.log("mappingSet",mappingSet, " mapToDelete ",mapToDelete);
+      console.log("Deleted mappingSet",mappingSet, " mapToDelete ",mapToDelete);
 
       setCurrentMappings(mappingSet).then(element => {
         updateMenu();
-        console.log("addCurrencyMapping done");
+        console.log("Update CurrencyMapping done");
         refreshOptions();
         return mappingSet;
       });
@@ -225,6 +237,11 @@ function eventListener(message, sender, sendResponse) {
     const result = addCurrencyMapping(message.data);
     sendResponse(result);
     console.log("addMap done: ", message.data);
+
+  } else if (message.event === "renewMap") {
+    const result = renewCurrencyMapping(message.data);
+    sendResponse(result);
+    console.log("renewMap done: ", message.data);
 
   } 
 }

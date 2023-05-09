@@ -13,6 +13,7 @@
     integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
   
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/options.css">
   <style>
     div.dropdown-menu.open{
       max-height: 314px !important;
@@ -54,23 +55,30 @@
         __MSG_installationWarning__
       </div>
       <section>
-        <h3><b>__MSG_addExMap__</b></h3>
+        <h3><b>__MSG_addExMap__</b>
+        
+        </h3> 
+        
       </section>
     </div>
     <form >
       <div class="mb-3 form-floating">
         
-        <select class="form-select form-control form-select-sm"  id="sourceCcy">
+        <!-- <select class="form-select form-control form-select-sm"  id="sourceCcy">
           
-        </select>
-        <label for="sourceCcy" for="sourceCcy">__MSG_chooseSourceCcy__</label>
+        </select> -->
+        <input id="sourceCcy" type="text" class="form-control currencyList typeaheadInput" data-provide="typeahead" placeholder="__MSG_chooseSourceCcy__"/>
+
+        <!-- <label for="sourceCcy" for="sourceCcy">__MSG_chooseSourceCcy__</label> -->
       </div>
       <div class="mb-3 form-floating">
 
-        <select class="form-select form-control form-select-sm"  id="targetCcy">
+        <!-- <select class="form-select form-control form-select-sm"  id="targetCcy">
           
-        </select>
-        <label for="targetCcy" for="targetCcy">__MSG_chooseTargetCcy__</label>
+        </select> -->
+        <input id="targetCcy" type="text" class="form-control currencyList typeaheadInput" data-provide="typeahead" placeholder="__MSG_chooseTargetCcy__"/>
+
+        <!-- <label for="targetCcy" for="targetCcy">__MSG_chooseTargetCcy__</label> -->
 
       </div>
 
@@ -82,7 +90,7 @@
       </div>
       <div class="mb-3">
 
-        <h3>__MSG_currentExMap__</h3>
+        <h3>__MSG_currentExMap__ </h3><small class="text-secondary">You can adjust the order by dragging and dropping</small>
         <div id="mappingList" class="list-group">
         </div>
       </div>
@@ -91,6 +99,9 @@
     
   </div>
 </body>
+<script src="/lib/jquery-3.6.4.min.js"></script>
+<script src="/lib/jquery-ui.min.js"></script>
+<script src="/lib/TypeAhead.js"></script>
 
 <script src="options.js"></script>
 

@@ -8,7 +8,7 @@
         "description":"The description of the application, displayed in the web store."
     },
     "AppShortName": {
-        "message":"QuickCur  v1.2.1",
+        "message":"QuickCur  v1.2.2",
         "description": "The short title of the application, displayed in the web store."
     },
     "installationWarning": {
@@ -18,7 +18,7 @@
         "message":"HOW TO USE"
     },
     "method1": {
-        "message":"Select the number text on page"
+        "message":"Select the number text on page ( You don't even select the exact only number, this tool can extract the number from text!)"
     },
     "method2": {
         "message":"Right Click on it"
@@ -36,10 +36,19 @@
         "message":"Choose Target Currency"
     },
     "addExMap": {
-        "message":"Add exchange mapping"
+        "message":"Add exchange mapping into right-click menu"
     },
     "currentExMap": {
         "message":"Current Exchange Map"
+    },
+    "addMappingDone": {
+        "message":"Added new current exchange setting! You can try the new added currency exchange in new page now"
+    },
+    "mappingListHint": {
+        "message":"You can adjust the order by dragging and dropping"
+    },
+    "addMapping": {
+        "message":"Add this mapping"
     },
     "selectedAmount": {
         "message":"Convert Currency"

@@ -7,11 +7,13 @@ chrome.runtime.onStartup.addListener(() => {
 });
 chrome.runtime.onInstalled.addListener((details) => {
   retrieveExchangeRate();
-  setDefaultCcyMapping();
+  
   if(details.reason === 'install'){
+    setDefaultCcyMapping();
     chrome.tabs.create({
       url: 'options.html'
     });
+    
   }else if(details.reason == "update"){
     chrome.tabs.create({
       url: 'options.html'

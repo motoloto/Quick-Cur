@@ -323,6 +323,12 @@ function addCurrencyMapping(source, target) {
         chrome.runtime.sendMessage({ event: "addMap", data: [source, target]}, function(response) {  
             refresh();
             console.log(response);  
+            
+            document.getElementById("addMappingDone").removeAttribute("hidden");
+            $("#addMappingDone").fadeTo(2000, 500).slideUp(500, function() {
+              $("#addMappingDone").slideUp(500);
+            });
+            
         }); 
     }
     

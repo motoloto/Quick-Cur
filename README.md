@@ -34,3 +34,4 @@ Google Chrome Store:
    * Add rate info in popup window
  * v1.2.2
    * Change logo
+   * Redesign options page. Add typeAhead for currency mapping. Allow changing ordering.

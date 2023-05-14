@@ -28,3 +28,9 @@ Google Chrome Store:
  * v1.2.0
    * Fix the issue that functionality failure which deal with number more than million.
    * Add black text color on pop-up  
+ * v1.2.1
+   * Make extractor can read number without comma
+   * Enhace extractor to be able to read number when user select string with both characters and number
+   * Add rate info in popup window
+ * v1.2.2
+   * Change logo

@@ -11,6 +11,9 @@
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/options.css">
   <style>
     div.dropdown-menu.open{
       max-height: 314px !important;
@@ -24,7 +27,7 @@
     <section>
       <div class="row">
         <div class="col-2">
-          <img src="images/128x128.png">
+          <img src="images/Logo.png">
         </div>
       
       </div>
@@ -48,46 +51,62 @@
       </section>
     </div>
     <div class="row">
-      <div class="alert alert-warning" role="alert">
+      <!-- <div class="alert alert-warning" role="alert">
         __MSG_installationWarning__
-      </div>
+      </div> -->
       <section>
-        <h3><b>__MSG_addExMap__</b></h3>
+        <h3><b>__MSG_addExMap__</b>
+        
+        </h3> 
+        
       </section>
     </div>
     <form >
       <div class="mb-3 form-floating">
         
-        <select class="form-select form-control form-select-sm"  id="sourceCcy">
+        <!-- <select class="form-select form-control form-select-sm"  id="sourceCcy">
           
-        </select>
-        <label for="sourceCcy" for="sourceCcy">__MSG_chooseSourceCcy__</label>
+        </select> -->
+        <input id="sourceCcy" type="text" class="form-control currencyList typeaheadInput" data-provide="typeahead" placeholder="__MSG_chooseSourceCcy__"/>
+
+        <!-- <label for="sourceCcy" for="sourceCcy">__MSG_chooseSourceCcy__</label> -->
       </div>
       <div class="mb-3 form-floating">
 
-        <select class="form-select form-control form-select-sm"  id="targetCcy">
+        <!-- <select class="form-select form-control form-select-sm"  id="targetCcy">
           
-        </select>
-        <label for="targetCcy" for="targetCcy">__MSG_chooseTargetCcy__</label>
+        </select> -->
+        <input id="targetCcy" type="text" class="form-control currencyList typeaheadInput" data-provide="typeahead" placeholder="__MSG_chooseTargetCcy__"/>
+
+        <!-- <label for="targetCcy" for="targetCcy">__MSG_chooseTargetCcy__</label> -->
 
       </div>
 
-
+      
 
       <div class="mb-3">
 
-        <button type="button" class="btn btn-success" id="addCcyMapping">Add</button>
+        <button type="button" class="btn btn-success" id="addCcyMapping">__MSG_addMapping__</button>
       </div>
+
+      <div id = "addMappingDone" class="alert alert-success" role="alert" hidden="true">
+        __MSG_addMappingDone__
+      </div>
+
       <div class="mb-3">
 
-        <h3>__MSG_currentExMap__</h3>
-        <ol id="mappingList" class="list-group">
-        </ol>
+        <h3>__MSG_currentExMap__ </h3><small class="text-secondary">__MSG_mappingListHint__</small>
+        <div id="mappingList" class="list-group">
+        </div>
       </div>
+
     </form>
     
   </div>
 </body>
+<script src="/lib/jquery-3.6.4.min.js"></script>
+<script src="/lib/jquery-ui.min.js"></script>
+<script src="/lib/TypeAhead.js"></script>
 
 <script src="options.js"></script>
 

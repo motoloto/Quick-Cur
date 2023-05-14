@@ -7,11 +7,13 @@ chrome.runtime.onStartup.addListener(() => {
 });
 chrome.runtime.onInstalled.addListener((details) => {
   retrieveExchangeRate();
-  setDefaultCcyMapping();
+  
   if(details.reason === 'install'){
+    setDefaultCcyMapping();
     chrome.tabs.create({
       url: 'options.html'
     });
+    
   }else if(details.reason == "update"){
     chrome.tabs.create({
       url: 'options.html'
@@ -52,21 +54,23 @@ function getExchangeRateFromStore(currencyMap) {
 }
 
 function extractOnlyNumber(text){
-  text = /\-?([1-9]{1}[0-9]{0,2}(\,\d{3})*(\.\d{0,2})?|[1-9]{1}\d{0,}(\.\d{0,2})?|0(\.\d{0,2})?|(\.\d{1,2}))|^\-?\$?([1-9]{1}\d{0,2}(\,\d{3})*(\.\d{0,2})?|[1-9]{1}\d{0,}(\.\d{0,2})?|0(\.\d{0,2})?|(\.\d{1,2}))|^\(\$?([1-9]{1}\d{0,2}(\,\d{3})*(\.\d{0,2})?|[1-9]{1}\d{0,}(\.\d{0,2})?|0(\.\d{0,2})?|(\.\d{1,2}))\)/.exec(text);
-  text = text[0].replaceAll(',','');
-  return text;
+  const reges = /(\d*\d{1,3}(,\d{3})*(\.\d+)*)/;
+  matchResult = text.match(reges);
+  getText = matchResult[0];
+  getText = getText.replaceAll(',','');
+  return getText;
 }
-
 
 
 function makeExchange(rateKey, info) {
   Promise.all([getExchangeRateFromStore(`USD${rateKey[0]}`), getExchangeRateFromStore(`USD${rateKey[1]}`)]).then(values => {
     const rateToUSD = values[0].Exrate;
     const rateToTarget = values[1].Exrate;
+    const totalRate =  rateToTarget / rateToUSD;
     const amount = Number(extractOnlyNumber(info.selectionText)) / rateToUSD * rateToTarget;
     if (!isNaN(amount)) {
       chrome.tabs.query({active: true, lastFocusedWindow: true}, function (tabs) {
-        chrome.tabs.sendMessage(tabs[0].id, { "amount": amount, "targetCcy": rateKey[1] }, function (response) {
+        chrome.tabs.sendMessage(tabs[0].id, { "amount": amount, "targetCcy": rateKey[1], "totalRate": totalRate }, function (response) {
           console.log(response);
           return true;
         });
@@ -168,6 +172,18 @@ function refreshOptions(){
   });
 }
 
+function renewCurrencyMapping(newCcyMap) {
+  
+  setCurrentMappings(newCcyMap).then(element => {
+    updateMenu();
+    console.log("Renew CurrencyMapping done");
+    // refreshOptions();
+    return newCcyMap;
+  });
+  
+}
+
+
 function addCurrencyMapping(newCcyMap) {
   if (newCcyMap && newCcyMap[0] && newCcyMap[1]) {
     let mappings = getCurrentMappings().then(mappings => {
@@ -175,7 +191,7 @@ function addCurrencyMapping(newCcyMap) {
       mappingSet.add(`${newCcyMap[0]}|${newCcyMap[1]}`);
       setCurrentMappings(mappingSet).then(element => {
         updateMenu();
-        console.log("addCurrencyMapping done");
+        console.log("Update CurrencyMapping done");
         refreshOptions();
         return mappingSet;
       });
@@ -188,11 +204,11 @@ function removeFromCurrencyMapping(mapToDelete) {
     let mappings = getCurrentMappings().then(mappings => {
       let mappingSet = new Set(mappings);
       mappingSet.delete(`${mapToDelete[0]}|${mapToDelete[1]}`);
-      console.log("mappingSet",mappingSet, " mapToDelete ",mapToDelete);
+      console.log("Deleted mappingSet",mappingSet, " mapToDelete ",mapToDelete);
 
       setCurrentMappings(mappingSet).then(element => {
         updateMenu();
-        console.log("addCurrencyMapping done");
+        console.log("Update CurrencyMapping done");
         refreshOptions();
         return mappingSet;
       });
@@ -223,6 +239,11 @@ function eventListener(message, sender, sendResponse) {
     const result = addCurrencyMapping(message.data);
     sendResponse(result);
     console.log("addMap done: ", message.data);
+
+  } else if (message.event === "renewMap") {
+    const result = renewCurrencyMapping(message.data);
+    sendResponse(result);
+    console.log("renewMap done: ", message.data);
 
   } 
 }

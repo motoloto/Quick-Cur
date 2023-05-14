@@ -1,29 +1,56 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-<html>
+<html style="min-width:500px;">
   <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
     <link rel="stylesheet" href="button.css">
   </head>
   <body>
-    <div class="container">
-    <div>
-      <b>Quick Cur:</b>
-      <p>The quick way to exchange your selection</p>
-      <ol>
-        <li>Select the number text on page</li>
-        <li>Right Click on it</li>
-        <li>Choose the exchange action you want to make</li>
-      </ol>
-    </div>
-    <button type="button" id="toOption" class="btn btn-outline-primary">Add Favorite Currency Map</button>
-    <div>
-      <b>Rate Data Source:</b>
-      <p>RTER: https://tw.rter.info/howto_currencyapi.php</p>
-    </div>
-    <div>
-      <b>匯率資料更新時間：</b>
-      <div id="storageUpdateTime">N/A</div>
+  <div class="modal modal-tour position-static d-block bg-secondary py-0 w-100" tabindex="-1" role="dialog" id="modalTour">
+    <div class="modal-dialog modal-sm" role="document">
+      <div class="modal-content rounded-4 shadow">
+        <div class="modal-body p-1 w-100 container-sm ">
+          <h2 class="fw-bold mb-0">Quick Cur </h2>v1.2.1
+          <div class="container-sm text-break">
+          <ul class="d-grid gap-1 my-1 list-unstyled pl-1">
+            <li class="d-flex gap-1">
+              <div class="container ">
+                <h5 class="mb-0 text-primary">How To Use</h5>
+                <ol>
+                  <li ><h6>Select the number text on page</h6></li>
+                  <li class="">Right Click on it</li>
+                  <li class="">Choose the exchange action you want to make</li>
+                </ol>
+              </div>
+            </li>
+            <li class="d-flex gap-1">
+              <div>
+                <h5 class="mb-0 text-primary">What's New</h5>
+                <ul>
+                <li>You now can see rate in popup window</li>
+                <li>Fix some issues</li>
+                </ul>
+              </div>
+            </li>
+            <li class="d-flex gap-1">
+              <div>
+                <h5 class="mb-0 text-primary">Latest data loaded at：</h5>
+                <div>
+                  <div id="storageUpdateTime">N/A</div>
+                </div>
+              </div>
+            </li>
+            <li class="d-flex gap-1">
+              <div>
+                <h5 class="mb-0 text-primary">Currency Data Source</h5>
+                 <p class="font-weight-light">https://tw.rter.info/howto_currencyapi.php</p>
+              </div>
+            </li>
+          </ul>
+          <button type="button" id="toOption" class="btn btn-lg btn-primary mt-1 w-100">Add Favorite Currency Map</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
     <script src="popup.js"></script>

@@ -1,6 +1,6 @@
 {
     "AppName": {
-        "message":"QuickCur 即時金額換匯幫手",
+        "message":"QuickCur 最快的網頁換匯工具",
         "description": "The title of the application, displayed in the web store."
         }    ,
     "AppDesc": {
@@ -8,7 +8,7 @@
         "description":"The description of the application, displayed in the web store."
     },
     "AppShortName": {
-        "message":"QuickCur v1.2.0",
+        "message":"QuickCur v1.2.2",
         "description": "The short title of the application, displayed in the web store."
     },
     "installationWarning": {
@@ -18,7 +18,7 @@
         "message":"使用方法"
     },
     "method1": {
-        "message":"將網頁上的數字匡起來"
+        "message":"將網頁上的數字匡起來 ( 就算是包含了一些其他文字也沒問題) "
     },
     "method2": {
         "message":"在反白部分按右鍵"
@@ -36,10 +36,19 @@
         "message":"選擇目標幣別"
     },
     "addExMap": {
-        "message":"新增轉換幣別"
+        "message":"新增轉換幣別到右鍵目錄上"
     },
     "currentExMap": {
-        "message":"目前的匯率轉換"
+        "message":"目前的幣別轉換"
+    },
+    "addMappingDone": {
+        "message":"新增轉換幣別成功! 現在可以到其他網頁上嘗試即時換匯"
+    },
+    "mappingListHint": {
+        "message":"您可以按住項目來調整排序"
+    },
+    "addMapping": {
+        "message":"新增轉換幣別"
     },
     "selectedAmount": {
         "message":"將所選金額"

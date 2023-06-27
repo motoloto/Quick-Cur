@@ -63,7 +63,7 @@ function extractOnlyNumber(text){
 
 
 function makeExchange(rateKey, info) {
-  Promise.all([getExchangeRateFromStore(`USD${rateKey[0]}`), getExchangeRateFromStore(`USD${rateKey[1]}`)]).then(values => {
+  Promise.all([getExchangeRateFromStore(`USD${rateKey[0].trim()}`), getExchangeRateFromStore(`USD${rateKey[1].trim()}`)]).then(values => {
     const rateToUSD = values[0].Exrate;
     const rateToTarget = values[1].Exrate;
     const totalRate =  rateToTarget / rateToUSD;
@@ -139,7 +139,7 @@ function prepareContextMenuBySetting(mappings) {
   mappings.forEach(map => {
     currencies = map.split("|");
     chrome.contextMenus.create(
-      { id: `${currencies[0]}to${currencies[1]}`, title: `${currencies[0]} => ${currencies[1]}`, type: "normal", parentId: "rootMenu", contexts: ["selection"] });
+      { id: `${currencies[0]}to${currencies[1]}`, title: `${currencies[0].trim()} => ${currencies[1].trim()}`, type: "normal", parentId: "rootMenu", contexts: ["selection"] });
   })
 
   //shortcut to option page

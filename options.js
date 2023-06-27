@@ -335,8 +335,8 @@ function addCurrencyMapping(source, target) {
 }
 
 function handleButtonClick(event) {
-      const sourceCcy = document.getElementById("sourceCcy").value;
-      const targetCcy = document.getElementById("targetCcy").value;
+      const sourceCcy = document.getElementById("sourceCcy").value.trim();
+      const targetCcy = document.getElementById("targetCcy").value.trim();
       addCurrencyMapping(sourceCcy.split("|")[0], targetCcy.split("|")[0]);
 }
 

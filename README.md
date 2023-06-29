@@ -36,4 +36,6 @@ Google Chrome Store:
    * Change logo
    * Redesign options page. Add typeAhead for currency mapping. Allow changing ordering.
  * v1.2.3
-   * The issue that new added exchange not working is fixed
+   * Fix the issue that new added exchange not working is fixed
+ * v1.2.4
+   * Fix the issue that menu is gone when extensio upgrades.

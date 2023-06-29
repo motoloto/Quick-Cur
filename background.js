@@ -15,6 +15,7 @@ chrome.runtime.onInstalled.addListener((details) => {
     });
     
   }else if(details.reason == "update"){
+    updateMenu(); // menu will be destroyed when extension upgrades.
     chrome.tabs.create({
       url: 'options.html'
     });

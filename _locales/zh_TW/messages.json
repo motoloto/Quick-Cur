@@ -1,10 +1,10 @@
 {
     "AppName": {
-        "message":"QuickCur 最快的網頁換匯工具",
+        "message":"QuickCur 泡泡換匯 - 最快的網頁換匯工具",
         "description": "The title of the application, displayed in the web store."
         }    ,
     "AppDesc": {
-        "message":"將網頁上所選取的金額即時換匯成你要的幣別，簡單選取按右鍵．算完的金額會顯示在原始金額旁邊",
+        "message":"簡單三步驟 : 反白數字，按右鍵．選擇幣別，顯示金額泡泡",
         "description":"The description of the application, displayed in the web store."
     },
     "AppShortName": {

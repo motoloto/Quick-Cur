@@ -42,7 +42,7 @@
         "message":"Add exchange mapping into right-click menu"
     },
     "currentExMap": {
-        "message":"Current Exchange Map"
+        "message":"Current Exchanging"
     },
     "addMappingDone": {
         "message":"Added new current exchange setting! You can try the new added currency exchange in new page now"

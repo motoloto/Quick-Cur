@@ -5,20 +5,38 @@ chrome.runtime.onMessage.addListener(eventListener);
 chrome.runtime.onStartup.addListener(() => {
   retrieveExchangeRate();
 });
+
 chrome.runtime.onInstalled.addListener((details) => {
   retrieveExchangeRate();
   
   if(details.reason === 'install'){
+    console.log("New installation!");
+
     setDefaultCcyMapping();
     chrome.tabs.create({
       url: 'options.html'
+    },
+    function(tab){
+      chrome.tabs.sendMessage(tab.id, {event: "extensionInstall"},{}, function(res){ console.log(res)});
     });
     
   }else if(details.reason == "update"){
+    console.log("Component Upgrade!");
     updateMenu(); // menu will be destroyed when extension upgrades.
     chrome.tabs.create({
       url: 'options.html'
+    },
+    function(tab){
+      console.log("tab Id " + tab.id);
+      
+      setTimeout(async function () {
+        const [tabs] = await chrome.tabs.query({active: true, lastFocusedWindow: true});
+        const res = await chrome.tabs.sendMessage(tab.id, {event: "extensionUpdate"});
+      },1000);
+      
     });
+   
+
   }
 });
 
@@ -62,49 +80,71 @@ function extractOnlyNumber(text){
   return getText;
 }
 
-
-function makeExchange(rateKey, info) {
-  Promise.all([getExchangeRateFromStore(`USD${rateKey[0].trim()}`), getExchangeRateFromStore(`USD${rateKey[1].trim()}`)]).then(values => {
-    const rateToUSD = values[0].Exrate;
-    const rateToTarget = values[1].Exrate;
-    const totalRate =  rateToTarget / rateToUSD;
-    const amount = Number(extractOnlyNumber(info.selectionText)) / rateToUSD * rateToTarget;
-    if (!isNaN(amount)) {
-      chrome.tabs.query({active: true, lastFocusedWindow: true}, function (tabs) {
-        chrome.tabs.sendMessage(tabs[0].id, { "amount": amount, "targetCcy": rateKey[1], "totalRate": totalRate }, function (response) {
-          console.log(response);
-          return true;
-        });
+// Add a function to record the last 10 currency exchanges
+function recordExchange(exchange) {
+  return new Promise((resolve) => {
+    chrome.storage.local.get("recentExchanges", (result) => {
+      let exchanges = result.recentExchanges || [];
+      const lastExchange = exchanges[0] || null;
+      exchanges.unshift(exchange);
+      if (exchanges.length > 10) {
+        exchanges.pop();
+      }
+      chrome.storage.local.set({ recentExchanges: exchanges }, () => {
+        resolve(lastExchange);
       });
-    }
+    });
   });
 }
 
+// Update makeExchange to record the exchange and send the last result
+async function makeExchange(rateKey, info) {
+  const values = await Promise.all([
+    getExchangeRateFromStore(`USD${rateKey[0].trim()}`),
+    getExchangeRateFromStore(`USD${rateKey[1].trim()}`)
+  ]);
 
+  const rateToUSD = values[0].Exrate;
+  const rateToTarget = values[1].Exrate;
+  const totalRate = rateToTarget / rateToUSD;
+  const sourceAmount = extractOnlyNumber(info.selectionText);
+  const sourceAmountNumber = Number(sourceAmount);
+  const amount =sourceAmountNumber / rateToUSD * rateToTarget;
 
+  if (!isNaN(amount)) {
+    const exchange = {
+      from: rateKey[0],
+      to: rateKey[1],
+      sourceAmount: sourceAmountNumber.toFixed(2),
+      amount: amount.toFixed(2),
+      rate: totalRate.toFixed(3),
+      timestamp: new Date().toISOString()
+    };
+    const lastExchange = await recordExchange(exchange);
+
+    chrome.tabs.query({ active: true, lastFocusedWindow: true }, function (tabs) {
+      chrome.tabs.sendMessage(tabs[0].id, { "amount": amount, "targetCcy": rateKey[1], "totalRate": totalRate, "lastExchange": lastExchange }, function (response) {
+        console.log(response);
+        return true;
+      });
+    });
+  }
+}
 
 function retrieveExchangeRate() {
   fetch('https://tw.rter.info/capi.php', {
-    method: 'GET', // *GET, POST, PUT, DELETE, etc.
+    method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      'Accept': 'application/json'
+      'Accept': 'application/json',
     },
-    credentials: 'same-origin',
-    redirect: 'follow', // manual, *follow, error
-    referrer: 'no-referrer', // *client, no-referrer
-  }).catch(error => console.error('Error:', error))
-    .then(response => response.json())
-    .then(text => {
-      // console.log("exchangeRates", text);
-      const currentTime = new Date();
-      chrome.storage.local.set({ "exchangeRates": text, "dataUpdateTime": `${currentTime}` },
-        function () {
-          if (chrome.extension.lastError) {
-            console.log("Got expected error: " + chrome.extension.lastError.message);
-          }
-        });
-    });
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      const currentTime = new Date().toISOString();
+      return setToStorage({ exchangeRates: data, dataUpdateTime: currentTime });
+    })
+    .catch((error) => console.error('Error:', error));
 }
 
 function setDefaultCcyMapping() {
@@ -128,25 +168,31 @@ function setDefaultCcyMapping() {
 }
 
 function prepareContextMenuBySetting(mappings) {
-  chrome.contextMenus.removeAll();
-  const selectedAmount = getMessage("selectedAmount");
-  chrome.contextMenus.create(
-    { id: "rootMenu", title: selectedAmount+"： %s", contexts: ["selection"] },
-    function () {
-      if (chrome.extension.lastError) {
-        console.log("Got expected error: " + chrome.extension.lastError.message);
-      }
+  chrome.contextMenus.removeAll(() => {
+    const selectedAmount = getMessage("selectedAmount");
+    chrome.contextMenus.create({
+      id: "rootMenu",
+      title: `${selectedAmount}： %s`,
+      contexts: ["selection"],
     });
-  mappings.forEach(map => {
-    currencies = map.split("|");
-    chrome.contextMenus.create(
-      { id: `${currencies[0]}to${currencies[1]}`, title: `${currencies[0].trim()} => ${currencies[1].trim()}`, type: "normal", parentId: "rootMenu", contexts: ["selection"] });
-  })
 
-  //shortcut to option page
-  chrome.contextMenus.create(
-    { id: `option`, title: `Can't find I want`, type: "normal", parentId: "rootMenu", contexts: ["selection"] });
+    mappings.forEach((map) => {
+      const [from, to] = map.split("|");
+      chrome.contextMenus.create({
+        id: `${from}to${to}`,
+        title: `${from.trim()} => ${to.trim()}`,
+        parentId: "rootMenu",
+        contexts: ["selection"],
+      });
+    });
 
+    chrome.contextMenus.create({
+      id: "option",
+      title: "[Add New convertting set]",
+      parentId: "rootMenu",
+      contexts: ["selection"],
+    });
+  });
 }
 
 function getCurrentMappings() {
@@ -219,9 +265,7 @@ function removeFromCurrencyMapping(mapToDelete) {
 
 
 function updateMenu() {
-  chrome.storage.local.get("currencyMappings", function (result) {
-    prepareContextMenuBySetting(result.currencyMappings);
-  });
+  getFromStorage("currencyMappings").then(prepareContextMenuBySetting);
 }
 
 function eventListener(message, sender, sendResponse) {
@@ -247,6 +291,18 @@ function eventListener(message, sender, sendResponse) {
     console.log("renewMap done: ", message.data);
 
   } 
+}
+
+function getFromStorage(key) {
+  return new Promise((resolve) => {
+    chrome.storage.local.get(key, (result) => resolve(result[key]));
+  });
+}
+
+function setToStorage(data) {
+  return new Promise((resolve) => {
+    chrome.storage.local.set(data, resolve);
+  });
 }
 
 

@@ -1,6 +1,6 @@
 {
     "AppName": {
-        "message":"QuickCur - Bubble Currency Exchange Helper",
+        "message":"QuickCur - Bubble Currency Converter",
         "description": "The title of the application, displayed in the web store."
         }    ,
     "AppDesc": {
@@ -8,7 +8,7 @@
         "description":"The description of the application, displayed in the web store."
     },
     "AppShortName": {
-        "message":"QuickCur  v1.2.4",
+        "message":"QuickCur",
         "description": "The short title of the application, displayed in the web store."
     },
     "installationWarning": {
@@ -17,8 +17,11 @@
     "usage": {
         "message":"HOW TO USE"
     },
+    "method0": {
+        "message":"In Options page, add the currency maaping you lik. Select the source and target currency"
+    },
     "method1": {
-        "message":"Select the number text on page ( You don't even select the exact only number, this tool can extract the number from text!)"
+        "message":"Select the number text on page ( You don't even need to only select the number, this tool can extract the number from text!)"
     },
     "method2": {
         "message":"Right Click on it"
@@ -52,6 +55,24 @@
     },
     "selectedAmount": {
         "message":"Convert Currency"
+    },
+    "thanksTitle":{
+        "message":"Thanks for supporting this extension"
+    },
+    "thanksMsg":{
+        "message":"I hope you enjoy this extension. Would you be willing to provide some feedback in the Chrome Store? Your review would be greatly appreciated and will help support the developer’s ongoing efforts. "
+    },
+    "noThanks":{
+        "message":"No thanks."
+    },
+    "goFeedBack":{
+        "message":"Sure!"
+    },
+    "giveMeFeedBack":{
+        "message":"GIVE FIVE STARTS REVIEW"
+    },
+    "newFeatureMsg": {
+        "message": "New feature! You now can see the last currency exchange you made in bubble."
     }
 }
 

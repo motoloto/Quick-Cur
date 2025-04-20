@@ -193,6 +193,31 @@ const Currencies = {
     "ZWL": "Zimbabwean Dollar"
   }
 
+
+window.Modal = bootstrap.Modal;
+
+
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+  console.log("options received " + request);
+    if (request.event === "refreshOptions") {
+      console.log("options received event: extensionUpdate");
+
+        refresh();
+        sendResponse("refreshOptions done");
+    }
+    if (request.event === "extensionUpdate") {
+      console.log("options received event: extensionUpdate");
+      var myModal = new Modal(document.getElementById('welcomModal'), {
+        keyboard: false
+      });
+      myModal.show();
+      sendResponse("extensionUpdate done");
+
+    }
+
+});
+
+
 //TODO Avoid much IO process. make background return new map
 function localizeHtmlPage()
 {
@@ -223,15 +248,7 @@ function getMessage(key){
 function displayCurrentMappingList() {
     chrome.storage.local.get("currencyMappings", function (result) {
 
-    //     <div  id="mappingList" class="list-group">
-    //     <div href="#" class="list-group-item list-group-item-action">          
-    //       <button type="button" class="btn secondary btn-sm float-start"><i class="bi bi-trash"></i></button>
-    //       <button type="button" class="btn secondary btn-sm float-start"><i class="bi bi-grip-vertical "></i></button>
-    //       <span class="ms-2">USD</span>        
-    //       <span class="ms-2"><i class="bi bi-shuffle "></i></span>
-    //       <span class="ms-2">TWD</span>      
-    //     </div>        
-    //   </div>
+
 
         result.currencyMappings.forEach(element => {
             var node = document.createElement("div");
@@ -378,12 +395,6 @@ function refresh(){
     
 }    
 
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-    if (request.event === "refreshOptions") {
-        refresh();
-        sendResponse("refreshOptions done");
-    }
-});
 
 function slist (target) {
     // (A) SET CSS + GET ALL LIST ITEMS

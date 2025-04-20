@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quick-Cur Options</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="/options.css">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+
+    .card {
+      margin-top: 20px;
+    }
+
+    #mappingList {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    #addExMapSection {
+      border-left: 2px solid #ddd;
+      padding-left: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <!-- Logo Section -->
+    <div class="text-center my-4">
+      <img src="images/Logo.png" alt="Quick-Cur Logo" class="img-fluid" style="max-width: 150px;">
+    </div>
+
+    <!-- Main Content -->
+    <div class="row">
+      <!-- Left Section -->
+      <div class="col-md-8">
+        <!-- Feedback Section -->
+        <div class="card">
+          <div class="card-body text-center">
+            <p class="card-text">__MSG_AppDesc__</p>
+            <a href="https://chrome.google.com/webstore/detail/nenjmmjmglcjbiabpgjggehahbdejoon"
+              class="btn btn-warning">
+              <i class="bi bi-star-fill"></i> __MSG_giveMeFeedBack__ <i class="bi bi-star-fill"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Usage Instructions -->
+        <div class="card">
+          <div class="card-body">
+            <h3 class="card-title">__MSG_usage__</h3>
+            <ol>
+              <li>__MSG_method0__</li>
+              <li>__MSG_method1__</li>
+              <li>__MSG_method2__</li>
+              <li>__MSG_method3__</li>
+              <li>__MSG_method4__</li>
+            </ol>
+          </div>
+        </div>
+
+        <!-- Add Currency Mapping -->
+        <div class="card" id="addExMapSection">
+          <div class="card-body">
+            <h3 class="card-title">__MSG_addExMap__</h3>
+            <form>
+              <div class="mb-3">
+                <label for="sourceCcy" class="form-label">__MSG_chooseSourceCcy__</label>
+                <input id="sourceCcy" type="text" class="form-control currencyList typeaheadInput"
+                  placeholder="__MSG_chooseSourceCcy__">
+              </div>
+              <div class="mb-3">
+                <label for="targetCcy" class="form-label">__MSG_chooseTargetCcy__</label>
+                <input id="targetCcy" type="text" class="form-control currencyList typeaheadInput"
+                  placeholder="__MSG_chooseTargetCcy__">
+              </div>
+              <button type="button" class="btn btn-success w-100" id="addCcyMapping">__MSG_addMapping__</button>
+            </form>
+            <div id="addMappingDone" class="alert alert-success mt-3" role="alert" hidden>
+              __MSG_addMappingDone__
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Section -->
+      <div class="col-md-4" id="rightSection">
+        <!-- Current Mapping List -->
+        <div class="card" id="mappingListCard">
+          <div class="card-body">
+            <h3 class="card-title">__MSG_currentExMap__</h3>
+            <small class="text-secondary">__MSG_mappingListHint__</small>
+            <div id="mappingList" class="list-group mt-3"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+<!-- 
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#welcomModal">
+      Launch demo modal
+    </button> -->
+
+    <!-- Welcome Modal -->
+    <div class="modal fade" id="welcomModal" tabindex="-1" aria-labelledby="welcomModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="welcomModalLabel">__MSG_thanksTitle__</h5>
+            <!-- Use data-dismiss for Bootstrap v4.1.3 -->
+            <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>__MSG_thanksMsg__</p>
+            <div class="alert alert-info mt-3" role="alert">
+              __MSG_newFeatureMsg__
+            </div>
+          </div>
+          <div class="modal-footer">
+            <!-- Use data-dismiss for Bootstrap v4.1.3 -->
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">__MSG_noThanks__</button>
+            <a href="https://chrome.google.com/webstore/detail/nenjmmjmglcjbiabpgjggehahbdejoon"
+              class="btn btn-warning">
+              __MSG_goFeedBack__
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="/lib/jquery-3.6.4.min.js"></script>
+  <script src="/lib/jquery-ui.min.js"></script>
+  <script src="/lib/TypeAhead.js"></script>
+  <script src="/lib/bootstrap.min.js"></script>
+  <script src="/lib/popper.min.js"></script>
+  <script src="/options.js"></script>
+</body>
+
+</html>

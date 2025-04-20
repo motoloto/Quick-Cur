@@ -1,0 +1,46 @@
+# Quick-Cur
+A Chrome extension which provide simple and quick way to exchange select number on screen with specific currency
+
+### HOW TO USE: ###
+ 1. Select the number text on page
+ 2. Right Click on it
+ 3. Choose the exchange action you want to make
+    
+The realtime exchange data source: https://tw.rter.info/howto_currencyapi.php
+
+Google Chrome Store: 
+    https://chrome.google.com/webstore/detail/quickcur-即時金額換匯幫手/nenjmmjmglcjbiabpgjggehahbdejoon?hl=zh-TW&authuser=0
+
+
+### UPDATE HISTORY: ###
+
+ * v1.3.0
+  * Now user can see the last coverting result in popup
+  * Fixed pop up window in option page
+ * v1.2.5
+  * Rename the package name in Eng.
+  * Add feedback page.
+ * v1.2.4
+  * Fix the issue that menu is gone when extensio upgrades.
+ * v1.2.3
+  * Fix the issue that new added exchange not working is fixed
+ * v1.2.2
+  * Change logo
+  * Redesign options page. Add typeAhead for currency mapping. Allow changing ordering.
+ * v1.2.1
+  * Make extractor can read number without comma
+  * Enhace extractor to be able to read number when user select string with both characters and number
+  * Add rate info in popup window
+ * v1.2.0
+  * Fix the issue that functionality failure which deal with number more than million.
+  * Add black text color on pop-up  
+ * v1.1.1
+  * Fix issue that add currency button not working
+ * v1.1.0
+  * Move Custom exchange map to option page
+    * Add link in context menu to setting page
+    * Support more currency
+    * Multi language support
+ * v1.0.0
+  * Bubble money exchange
+    * Custom exchange map

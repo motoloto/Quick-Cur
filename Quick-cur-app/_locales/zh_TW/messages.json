@@ -17,6 +17,9 @@
     "usage": {
         "message":"使用方法"
     },
+    "method0": {
+        "message":"在選項頁面中，增加常用的幣別轉換"
+    },
     "method1": {
         "message":"將網頁上的數字匡起來 ( 就算是包含了一些其他文字也沒問題) "
     },
@@ -52,6 +55,24 @@
     },
     "selectedAmount": {
         "message":"將所選金額"
+    },
+    "thanksTitle":{
+        "message":"感謝您安裝這個插件"
+    },
+    "thanksMsg":{
+        "message":"希望這個插件能夠幫助您，如果可以的話，請在Google Chrome Store上留下您的評論，您的評論是支持開發者的動力."
+    },
+    "noThanks":{
+        "message":"不了"
+    },
+    "goFeedBack":{
+        "message":"好"
+    },
+    "giveMeFeedBack":{
+        "message":"給五星好評!"
+    },
+    "newFeatureMsg": {
+        "message": "新功能！您現在可以在泡泡中看到您上次的貨幣兌換記錄。"
     }
 }
 
